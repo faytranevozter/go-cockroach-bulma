@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"github.com/gorilla/mux"
 	"html/template"
+	"encoding/json"
 )
 
 const (
@@ -12,40 +13,76 @@ const (
 	PORT       = "8888"
 )
 
-type DataUser struct {
-	Number int
-	Id string
-	Name string
-	Email string
+/* USER */
+type User struct {
+	Id string `json:"id"`
+	Name string `json:"name"`
+	Email string `json:"email"`
 }
 
-type PageUsers struct {
-	Title string
-	Data [] DataUser 
+func getUser() []User {
+	return [] User {
+		{Id: "1", Name: "Fahrur", Email: "fahrur@mail.com"},
+		{Id: "3", Name: "Laily", Email: "laily@mail.com"},
+		{Id: "5", Name: "Oky", Email: "oky@mail.com"},
+		{Id: "6", Name: "Indra", Email: "indra@mail.com"},
+		{Id: "7", Name: "Rismi", Email: "rismi@mail.com"},
+	}
 }
 
-func index_handler(w http.ResponseWriter, r *http.Request) {
-	tmpl := template.Must(template.ParseFiles("template/users.html"))
-	data := PageUsers {
-		Title: "Halaman Home",
-		Data: [] DataUser {
-			{Number: 1, Id: "1", Name: "Fahrur", Email: "fahrur@mail.com"},
-			{Number: 2, Id: "3", Name: "Laily", Email: "laily@mail.com"},
-			{Number: 3, Id: "5", Name: "Oky", Email: "oky@mail.com"},
-			{Number: 4, Id: "6", Name: "Indra", Email: "indra@mail.com"},
-			{Number: 5, Id: "7", Name: "Rismi", Email: "rismi@mail.com"},
-		},
+func all_user(w http.ResponseWriter, r *http.Request) {
+	tmpl := template.Must(template.ParseFiles("template/user.html"))
+	data := struct {
+		Title string
+	}{
+		Title: "Data User",
 	}
 	tmpl.Execute(w, data)
 }
 
-func all_user(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "This is all user")
+func get_user(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-type", "application/json")
+	datajson, _ := json.Marshal(getUser())
+	fmt.Fprintf(w, string(datajson))
 }
 
-func user_specific(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-	fmt.Fprintf(w, "Hallo %s", vars["name"])
+func add_user(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-type", "application/json")
+	is_success := true 
+	if len(r.FormValue("name")) == 0 {
+		is_success = false
+	} else if len(r.FormValue("email")) == 0 {
+		is_success = false
+	}
+	datajson, _ := json.Marshal(struct {
+					Success bool `json:"success"`
+					Data []User `json:"data"`
+				}{is_success, getUser()})
+	fmt.Fprintf(w, string(datajson))
+}
+
+func update_user(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-type", "application/json")
+	datajson, _ := json.Marshal(getUser())
+	fmt.Fprintf(w, string(datajson))
+}
+
+func delete_user(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-type", "application/json")
+	datajson, _ := json.Marshal(getUser())
+	fmt.Fprintf(w, string(datajson))
+}
+/* END OF USER */
+
+// main handler
+func index_handler(w http.ResponseWriter, r *http.Request) {
+	tmpl := template.Must(template.ParseFiles("template/home.html"))
+	data := struct {
+		Title string
+	}{
+		Title: "Halaman Home",
+	}
+	tmpl.Execute(w, data)
 }
 
 func main() {
@@ -59,10 +96,13 @@ func main() {
     // first page
 	r.HandleFunc("/", index_handler)
 
-	// testing sub router
+	// route user
 	userrouter := r.PathPrefix("/user").Subrouter()
 	userrouter.HandleFunc("/", all_user).Methods("GET")
-	userrouter.HandleFunc("/{name}", user_specific)
+	userrouter.HandleFunc("/get", get_user).Methods("GET")
+	userrouter.HandleFunc("/add", add_user).Methods("POST")
+	userrouter.HandleFunc("/update", update_user).Methods("PUT")
+	userrouter.HandleFunc("/delete", delete_user).Methods("DELETE")
 
 	http.ListenAndServe(":" + PORT, r)
 }
