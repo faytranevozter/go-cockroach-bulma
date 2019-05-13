@@ -20,6 +20,9 @@ and then
 
 `export PATH=$PATH:/usr/local/go/bin`
 
+### Install Dependency package
+- Gorilla/mux `go get -u github.com/gorilla/mux`
+
 ## Running App
 1. Clone this repo  
 2. Run `go run web.go`
