@@ -101,6 +101,38 @@
 		</div>
 		<button class="modal-close close-button is-large" aria-label="close"></button>
 	</div>
+
+	<div class="modal" id="edit-modal">
+		<div class="modal-background"></div>
+		<div class="modal-content">
+			<div class="box">
+				<form id="edit-form">
+					<input type="hidden" name="id">
+					<div class="field">
+						<label class="label">Name</label>
+						<div class="control">
+							<input name="name" class="input" type="text" placeholder="Name">
+						</div>
+					</div>
+					<div class="field">
+						<label class="label">Email</label>
+						<div class="control">
+							<input name="email" class="input" type="email" placeholder="Email">
+						</div>
+					</div>
+					<div class="field is-grouped">
+						<div class="control">
+							<button type="submit" class="button is-link">Save</button>
+						</div>
+						<div class="control">
+							<button type="reset" class="button is-text close-button">Cancel</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+		<button class="modal-close close-button is-large" aria-label="close"></button>
+	</div>
 	
 	<script>
 
@@ -173,6 +205,31 @@
 					$('.modal-close.close-button').click();
 				});
 				
+			});
+
+			// get detail
+			$('#table-data').on('click', '.edit-button', function(e) {
+				e.preventDefault();
+				// get data with ajax
+				$.ajax({
+					url: './get_detail',
+					type: 'GET',
+					dataType: 'json',
+					data: {id: $(this).attr('data-id')},
+				}).done(function(res) {
+					if (res.success) {
+						// set value form inside modal
+						$('#edit-form input[name=id]').val(res.data.id)
+						$('#edit-form input[name=name]').val(res.data.name)
+						$('#edit-form input[name=email]').val(res.data.email)
+						// open edit modal
+						$('#edit-modal').addClass('is-active');
+					} else {
+						alert(res.message)
+					}
+				}).fail(function() {
+					alert('Something went wrong!')
+				});
 			});
 		});
 	</script>
