@@ -64,7 +64,7 @@
 				</thead>
 				<tbody>
 					<tr>
-						<td colspan="4">Loading...</td>
+						<td colspan="4" class="has-text-centered">Loading...</td>
 					</tr>
 				</tbody>
 			</table>
@@ -136,6 +136,22 @@
 	
 	<script>
 
+		function loadData() {
+			$.ajax({
+				url: './get_user',
+				type: 'GET',
+				dataType: 'json',
+				data: {},
+				beforeSend: function(){
+					$('#table-data tbody').html(`<tr> <td colspan="4" class="has-text-centered">Loading..</td> </tr>`);
+				},
+			}).done((data) => {
+				generateData(data);
+			}).fail(() => {
+				alert('Something went wrong!')
+			});
+		}
+
 		function generateData(data) {
 			var _newData = '';
 			if (data.length > 0) {
@@ -151,7 +167,7 @@
 					</tr>`;
 				});
 			} else {
-				_newData += `<tr> <td colspan="4">No data found.</td> </tr>`;
+				_newData += `<tr> <td colspan="4" class="has-text-centered">No data found.</td> </tr>`;
 			}
 			$('#table-data tbody').html(_newData);
 		}
@@ -168,25 +184,19 @@
 			});
 
 			// load first data
-			$.ajax({
-				url: './get',
-				type: 'GET',
-				dataType: 'json',
-				data: {},
-			}).done((data) => {
-				generateData(data);
-			}).fail(() => {
-				alert('Something went wrong!')
-			});
+			loadData()
 			
 			// submit event
 			$('#add-form').submit(function(e) {
 				e.preventDefault();
 				$.ajax({
-					url: './add',
+					url: './add_user',
 					type: 'POST',
 					dataType: 'json',
 					data: $(this).serialize(),
+					beforeSend: function(){
+						$('#message').removeClass('is-danger is-success is-info').hide()
+					},
 				}).done((res) => {
 					if (res.success) {
 						// refresh data
@@ -194,15 +204,15 @@
 						// reset form
 						$(this).get(0).reset();
 						// display message
-						$('#message').removeClass('is-danger is-success is-info').addClass('is-success').text('Success input data').fadeIn()
+						$('#message').addClass('is-success').text('Success input data').fadeIn()
 					} else {
 						// display message
-						$('#message').removeClass('is-danger is-success is-info').addClass('is-danger').text('Failed input data').fadeIn()
+						$('#message').addClass('is-danger').text('Failed input data').fadeIn()
 					}
 				}).fail(_ => {
 					alert('Something went wrong!')
 				}).always((res) => {
-					$('.modal-close.close-button').click();
+					$(this).closest('.modal').find('.modal-close.close-button').click();
 				});
 				
 			});
@@ -212,10 +222,10 @@
 				e.preventDefault();
 				// get data with ajax
 				$.ajax({
-					url: './get_detail',
+					url: './get_detail_user/' + $(this).attr('data-id'),
 					type: 'GET',
 					dataType: 'json',
-					data: {id: $(this).attr('data-id')},
+					data: {},
 				}).done(function(res) {
 					if (res.success) {
 						// set value form inside modal
@@ -230,6 +240,68 @@
 				}).fail(function() {
 					alert('Something went wrong!')
 				});
+			});
+
+			// submit event (edit)
+			$('#edit-form').submit(function(e) {
+				e.preventDefault();
+				$.ajax({
+					url: './update_user/' + $('#edit-form input[name=id]').val(),
+					type: 'PUT',
+					dataType: 'json',
+					data: {
+						name: $('#edit-form input[name=name]').val(),
+						email: $('#edit-form input[name=email]').val(),
+					},
+					beforeSend: function(){
+						$('#message').removeClass('is-danger is-success is-info').hide()
+					},
+				}).done((res) => {
+					if (res.success) {
+						// refresh data
+						generateData(res.data);
+						// reset form
+						$(this).get(0).reset();
+						// display message
+						$('#message').addClass('is-success').text('Success update data').fadeIn()
+					} else {
+						// display message
+						$('#message').addClass('is-danger').text('Failed update data').fadeIn()
+					}
+				}).fail(_ => {
+					alert('Something went wrong!')
+				}).always((res) => {
+					$(this).closest('.modal').find('.modal-close.close-button').click();
+				});
+				
+			});
+
+			// delete data
+			$('#table-data').on('click', '.delete-button', function(e) {
+				e.preventDefault();
+				// confirm
+				if (confirm('Are you sure?')) {
+					// get data with ajax
+					$.ajax({
+						url: './delete_user/' + $(this).attr('data-id'),
+						type: 'DELETE',
+						dataType: 'json',
+						data: {},
+						beforeSend: function(){
+							$('#message').removeClass('is-danger is-success is-info').hide()
+						},
+					}).done(function(res) {
+						if (res.success) {
+							$('#message').addClass('is-success').text('Data deleted successfully').fadeIn()
+							// reload data
+							generateData(res.data);
+						} else {
+							$('#message').addClass('is-danger').text('Failed to remove data').fadeIn()
+						}
+					}).fail(function() {
+						alert('Something went wrong!')
+					});
+				}
 			});
 		});
 	</script>

@@ -44,5 +44,6 @@ Follow [this](https://www.cockroachlabs.com/docs/stable/install-cockroachdb-wind
 3. Import sql from cockroach sql. (if you've done this before, then ignore this step)  
 `cockroach sql --insecure`  
 and then import sql from [this](https://raw.githubusercontent.com/faytranevozter/go-cockroach-bulma/master/db.sql)
-4. Run `go run web.go`
+4. Run `go run *.go`
 5. Done. See (http://localhost:8888) to see the app.
+
