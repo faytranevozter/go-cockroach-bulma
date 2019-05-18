@@ -30,6 +30,10 @@ Follow [this](https://www.cockroachlabs.com/docs/stable/install-cockroachdb-wind
 2. Copy into `PATH`  
 `cp -i cockroach-v19.1.0.linux-amd64/cockroach /usr/local/bin`
 
+#### Docker
+1. Pull Cockroach from docker hub  
+`docker pull cockroachdb/cockroach:v19.1.0`  
+
 ### Install Dependency package
 - Gorilla/mux  
 `go get -u github.com/gorilla/mux`
@@ -40,10 +44,17 @@ Follow [this](https://www.cockroachlabs.com/docs/stable/install-cockroachdb-wind
 1. Clone this repo  
 `git clone https://github.com/faytranevozter/go-cockroach-bulma.git`
 2. Start cockroach db  
-`cockroach start --insecure`
+for Linux  
+`cockroach start --insecure`  
+for Docker  
+`docker run -d -p 26257:26257 -p 8080:8080 cockroachdb/cockroach:v19.1.0 start --insecure`
 3. Import sql from cockroach sql. (if you've done this before, then ignore this step)  
+for Linux  
 `cockroach sql --insecure`  
+for Docker  
+`docker exec -it container_name ./cockroach sql --insecure`  
 and then import sql from [this](https://raw.githubusercontent.com/faytranevozter/go-cockroach-bulma/master/db.sql)
 4. Run `go run *.go`
 5. Done. See (http://localhost:8888) to see the app.
+
 
