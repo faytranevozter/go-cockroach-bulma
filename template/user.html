@@ -294,7 +294,7 @@
 						if (res.success) {
 							$('#message').addClass('is-success').text('Data deleted successfully').fadeIn()
 							// reload data
-							generateData(res.data);
+							loadData();
 						} else {
 							$('#message').addClass('is-danger').text('Failed to remove data').fadeIn()
 						}
