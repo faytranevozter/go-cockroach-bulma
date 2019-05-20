@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"os"
 	"net/http"
 	"html/template"
 	"database/sql"
@@ -28,8 +29,13 @@ func index_handler(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	// connect to the database
+	if len(os.Getenv("ROACH_USER")) == 0 { os.Setenv("ROACH_USER", "root") }
+	if len(os.Getenv("ROACH_HOST")) == 0 { os.Setenv("ROACH_HOST", "localhost") }
+	if len(os.Getenv("ROACH_PORT")) == 0 { os.Setenv("ROACH_PORT", "26257") }
+	if len(os.Getenv("ROACH_DB")) == 0 { os.Setenv("ROACH_DB", "tugas_cockroach") }
+
 	db, err = sql.Open("postgres",
-		"postgresql://root@localhost:26257/tugas_cockroach?sslmode=disable")
+		"postgresql://" + os.Getenv("ROACH_USER") + "@" + os.Getenv("ROACH_HOST") + ":" + os.Getenv("ROACH_PORT") + "/" + os.Getenv("ROACH_DB") + "?sslmode=disable")
 	if err != nil {
 		fmt.Println("error connecting to the database: ", err)
 	}
