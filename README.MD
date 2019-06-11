@@ -57,4 +57,5 @@ and then import sql from [this](https://raw.githubusercontent.com/faytranevozter
 4. Run `go run *.go`
 5. Done. See (http://localhost:8888) to see the app.
 
-
+## Deploy App
+[See here](https://github.com/faytranevozter/go-cockroach-bulma/blob/master/DOCKERIZING.MD)  
