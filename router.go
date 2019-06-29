@@ -38,5 +38,15 @@ func initRouter() *mux.Router {
 	mobilruter.HandleFunc("/update_mobil/{id:[0-9]+}", update_mobil).Methods("PUT")
 	mobilruter.HandleFunc("/delete_mobil/{id:[0-9]+}", delete_mobil).Methods("DELETE")
 
+	// route buku
+	bukuruter := r.PathPrefix("/buku").Subrouter()
+	bukuruter.HandleFunc("/", all_buku).Methods("GET")
+	bukuruter.HandleFunc("/get_buku", get_buku).Methods("GET")
+	bukuruter.HandleFunc("/get_detail_buku/{id:[0-9]+}", get_buku_detail).Methods("GET")
+	bukuruter.HandleFunc("/add_buku", add_buku).Methods("POST")
+	bukuruter.HandleFunc("/update_buku/{id:[0-9]+}", update_buku).Methods("PUT")
+	bukuruter.HandleFunc("/delete_buku/{id:[0-9]+}", delete_buku).Methods("DELETE")
+
+
 	return r
 }
