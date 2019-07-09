@@ -30,3 +30,19 @@ INSERT INTO tugas_cockroach.buku(judul, pengarang, tahun) VALUES
 ('Agroculture', 'Indra Purnama', '2019'),
 ('Antologi Puisi', 'Laily Rahma', '2018'),
 ('Agro Cabe', 'Rismi', '2017');
+
+-- create table mobil
+CREATE TABLE tugas_cockroach.mobil (
+	id SERIAL PRIMARY KEY, 
+	mobil VARCHAR(50),
+	jenis VARCHAR(50),
+	tahun VARCHAR(4)
+);
+
+-- dummy data table mobil
+INSERT INTO tugas_cockroach.mobil(mobil, jenis, tahun) VALUES
+('Lamborghini', 'Supercar', '2019'),
+('Ferrari', 'Supercar', '2018'),
+('Holden', 'American muscle', '2019'),
+('Innova', 'City car', '2019'),
+('Civic', 'City Car', '2017');
