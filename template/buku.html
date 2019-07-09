@@ -9,6 +9,284 @@
 	<script src="/static/js/app.js"></script>
 </head>
 <body>
-	tes
+	
+	<div class="container">
+
+		<div class="content">
+			<button class="button is-primary" id="add-button">Tambah Data Buku</button>
+			<a class="button is-danger" href="/mobil/">Mobil</a>
+			<a class="button is-info" href="/user/">User</a>
+			<a class="button is-dark" href="/kucing/">Kucing</a>
+			<a class="button is-warning" href="#">Embuh</a>
+			<hr>
+			<div class="notification is-danger" id="message" style="display: none;margin-bottom: 1.5rem;"></div>
+			<table class="table is-bordered is-striped is-fullwidth" id="table-data">
+				<thead>
+					<tr class="has-background-primary">
+						<th>No.</th>
+						<th>Judul</th>
+						<th>Pengarang</th>
+						<th>Tahun</th>
+						<th>Keterangan</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td colspan="4" class="has-text-centered">Loading...</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+	<div class="modal" id="add-modal">
+		<div class="modal-background"></div>
+		<div class="modal-content">
+			<div class="box">
+				<form id="add-form">
+					<div class="field">
+						<label class="label">Judul</label>
+						<div class="control">
+							<input name="judul" class="input" type="text" placeholder="Judul">
+						</div>
+					</div>
+					<div class="field">
+						<label class="label">Pengarang</label>
+						<div class="control">
+							<input name="pengarang" class="input" type="text" placeholder="Pengarang">
+						</div>
+					</div>
+					<div class="field">
+						<label class="label">Tahun</label>
+						<div class="control">
+							<input name="tahun" class="input" type="text" placeholder="Tahun">
+						</div>
+					</div>
+					<div class="field is-grouped">
+						<div class="control">
+							<button type="submit" class="button is-link">Simpan</button>
+						</div>
+						<div class="control">
+							<button type="reset" class="button is-text close-button">Batal</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+		<button class="modal-close close-button is-large" aria-label="close"></button>
+	</div>
+
+	<div class="modal" id="edit-modal">
+		<div class="modal-background"></div>
+		<div class="modal-content">
+			<div class="box">
+				<form id="edit-form">
+					<input type="hidden" name="id">
+					<div class="field">
+						<label class="label">Judul</label>
+						<div class="control">
+							<input name="judul" class="input" type="text" placeholder="Judul">
+						</div>
+					</div>
+					<div class="field">
+						<label class="label">Pengarang</label>
+						<div class="control">
+							<input name="pengarang" class="input" type="text" placeholder="Pengarang">
+						</div>
+					</div>
+					<div class="field">
+						<label class="label">Tahun</label>
+						<div class="control">
+							<input name="tahun" class="input" type="text" placeholder="Tahun">
+						</div>
+					</div>
+					<div class="field is-grouped">
+						<div class="control">
+							<button type="submit" class="button is-link">Simpan</button>
+						</div>
+						<div class="control">
+							<button type="reset" class="button is-text close-button">Batal</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+		<button class="modal-close close-button is-large" aria-label="close"></button>
+	</div>
+	
+	<script>
+
+		function loadData() {
+			$.ajax({
+				url: './get_buku',
+				type: 'GET',
+				dataType: 'json',
+				data: {},
+				beforeSend: function(){
+					$('#table-data tbody').html(`<tr> <td colspan="5" class="has-text-centered">Loading..</td> </tr>`);
+				},
+			}).done((data) => {
+				generateData(data);
+			}).fail(() => {
+				alert('Something went wrong!')
+			});
+		}
+
+		function generateData(data) {
+			var _newData = '';
+			if (data.length > 0) {
+				data.forEach((v, i) => {
+					_newData += `<tr>
+						<td>${i+1}.</td>
+						<td>${v.judul}</td>
+						<td>${v.pengarang}</td>
+						<td>${v.tahun}</td>
+						<td>
+							<button class="button is-info is-small edit-button" data-id="${v.id}">Ubah</button>
+							<button class="button is-danger is-small delete-button" data-id="${v.id}">Hapus</button>
+						</td>
+					</tr>`;
+				});
+			} else {
+				_newData += `<tr> <td colspan="5" class="has-text-centered">No data found.</td> </tr>`;
+			}
+			$('#table-data tbody').html(_newData);
+		}
+
+		$(document).ready(function() {
+			// open modal
+			$('#add-button').click(function(e) {
+				$('#add-modal').addClass('is-active');
+			});
+
+			// close modal
+			$('.modal .close-button').click(function(e) {
+				$(this).closest('.modal').removeClass('is-active');
+			});
+
+			// load first data
+			loadData()
+			
+			// submit event
+			$('#add-form').submit(function(e) {
+				e.preventDefault();
+				$.ajax({
+					url: './add_buku',
+					type: 'POST',
+					dataType: 'json',
+					data: $(this).serialize(),
+					beforeSend: function(){
+						$('#message').removeClass('is-danger is-success is-info').hide()
+					},
+				}).done((res) => {
+					if (res.success) {
+						// refresh data
+						generateData(res.data);
+						// reset form
+						$(this).get(0).reset();
+						// display message
+						$('#message').addClass('is-success').text('Success input data').fadeIn()
+					} else {
+						// display message
+						$('#message').addClass('is-danger').text('Failed input data').fadeIn()
+					}
+				}).fail(_ => {
+					alert('Something went wrong!')
+				}).always((res) => {
+					$(this).closest('.modal').find('.modal-close.close-button').click();
+				});
+				
+			});
+
+			// get detail
+			$('#table-data').on('click', '.edit-button', function(e) {
+				e.preventDefault();
+				// get data with ajax
+				$.ajax({
+					url: './get_detail_buku/' + $(this).attr('data-id'),
+					type: 'GET',
+					dataType: 'json',
+					data: {},
+				}).done(function(res) {
+					if (res.success) {
+						// set value form inside modal
+						$('#edit-form input[name=id]').val(res.data.id)
+						$('#edit-form input[name=judul]').val(res.data.judul)
+						$('#edit-form input[name=pengarang]').val(res.data.pengarang)
+						$('#edit-form input[name=tahun]').val(res.data.tahun)
+						// open edit modal
+						$('#edit-modal').addClass('is-active');
+					} else {
+						alert(res.message)
+					}
+				}).fail(function() {
+					alert('Something went wrong!')
+				});
+			});
+
+			// submit event (edit)
+			$('#edit-form').submit(function(e) {
+				e.preventDefault();
+				$.ajax({
+					url: './update_buku/' + $('#edit-form input[name=id]').val(),
+					type: 'PUT',
+					dataType: 'json',
+					data: {
+						judul: $('#edit-form input[name=judul]').val(),
+						pengarang: $('#edit-form input[name=pengarang]').val(),
+						tahun: $('#edit-form input[name=tahun]').val(),
+					},
+					beforeSend: function(){
+						$('#message').removeClass('is-danger is-success is-info').hide()
+					},
+				}).done((res) => {
+					if (res.success) {
+						// refresh data
+						generateData(res.data);
+						// reset form
+						$(this).get(0).reset();
+						// display message
+						$('#message').addClass('is-success').text('Success update data').fadeIn()
+					} else {
+						// display message
+						$('#message').addClass('is-danger').text('Failed update data').fadeIn()
+					}
+				}).fail(_ => {
+					alert('Something went wrong!')
+				}).always((res) => {
+					$(this).closest('.modal').find('.modal-close.close-button').click();
+				});
+				
+			});
+
+			// delete data
+			$('#table-data').on('click', '.delete-button', function(e) {
+				e.preventDefault();
+				// confirm
+				if (confirm('Are you sure?')) {
+					// get data with ajax
+					$.ajax({
+						url: './delete_buku/' + $(this).attr('data-id'),
+						type: 'DELETE',
+						dataType: 'json',
+						data: {},
+						beforeSend: function(){
+							$('#message').removeClass('is-danger is-success is-info').hide()
+						},
+					}).done(function(res) {
+						if (res.success) {
+							$('#message').addClass('is-success').text('Data deleted successfully').fadeIn()
+							// reload data
+							loadData();
+						} else {
+							$('#message').addClass('is-danger').text('Failed to remove data').fadeIn()
+						}
+					}).fail(function() {
+						alert('Something went wrong!')
+					});
+				}
+			});
+		});
+	</script>
 </body>
 </html>
