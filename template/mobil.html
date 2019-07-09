@@ -6,99 +6,299 @@
   <title>TCC Lanjut</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.4/css/bulma.min.css">
   <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+  <script src="/static/js/jquery-3.4.1.min.js"></script>
+  <script src="/static/js/app.js"></script>
   <style>
-    .logo{
-      width: 300px;
-    }
-  </style>
+  .logo{
+    width: 300px;
+  }
+</style>
 </head>
 <body>
-  <section class="section">
-    <div class="container">
-      <h1 class="title">
-        Selamat Datang
-      </h1>
-      <img src="Logo.png" alt="" class="logo">
-      <br>
-      <p class="subtitle">
-        Ada yang bisa kami <strong>bantu</strong>?
-      </p>
-      <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
-        <thead>
-          <tr>
-            <th><abbr title="Nomor">No.</abbr></th>
-            <th><abbr title="Name">Nama</abbr></th>
-            <th><abbr title="Alamat">Alamat</abbr></th>
-            <th><abbr title="Email">Email</abbr></th>
-            <th><abbr title="Pesanan">Pesanan</abbr></th>
-            <th><abbr title="Keterangan">Keterangan</abbr></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <th>1</th>
-            <td>Oky Riyanto</td>
-            <td>Yogyakarta</td>
-            <td>oky@yeay.com</td>
-            <td>Sepatu Converse</td>
-            <td><button class="button is-primary">Edit</button>
-              <button class="button is-link">Tambah</button>
-              <button class="button is-danger">Hapus</button>
-            </td>
-          </tr>
-        </tr>
-        <tr>
-          <th>2</th>
-          <td>Muhammad Fahrur Rifai</td>
-          <td>Sleman</td>
-          <td>fay@yeay.com</td>
-          <td>Laptop Asus</td>
-          <td><button class="button is-primary">Edit</button>
-            <button class="button is-link">Tambah</button>
-            <button class="button is-danger">Hapus</button>
-          </td>
-        </tr>
-      </tr>
-      <tr>
-        <th>3</th>
-        <td>Indra Purnama Hadi</td>
-        <td>Magelang</td>
-        <td>boy@yeay.com</td>
-        <td>Velg Racing</td>
-        <td><button class="button is-primary">Edit</button>
-          <button class="button is-link">Tambah</button>
-          <button class="button is-danger">Hapus</button>
-        </td>
-      </tr>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>Laily Rohmawati</td>
-      <td>Pati</td>
-      <td>laily@yeay.com</td>
-      <td>Lipstik</td>
-      <td><button class="button is-primary">Edit</button>
-        <button class="button is-link">Tambah</button>
-        <button class="button is-danger">Hapus</button>
-      </td>
-    </tr>
-    <tr>
-      <th>5</th>
-      <td>Bantul</td>
-      <td>Yogyakarta</td>
-      <td>rismi@yeay.com</td>
-      <td>Sweater</td>
-      <td><button class="button is-primary">Edit</button>
-        <button class="button is-link">Tambah</button>
-        <button class="button is-danger">Hapus</button>
-      </td>
-    </tr>
-  </tr>
-</tr>
-</div>
-</tbody>
-</table>
-</div>
+  <div class="container">
+    <a class="button is-danger is-pulled-right" href="/buku/" style="margin-left: 20px; margin-top: 20px;">Buku</a>
+    <a class="button is-info is-pulled-right" href="/user/" style="margin-left: 20px; margin-top: 20px;">User</a>
+    <a class="button is-dark is-pulled-right" href="/kucing/" style="margin-left: 20px; margin-top: 20px;">Kucing</a>
+    <a class="button is-warning is-pulled-right" href="#" style="margin-left: 20px; margin-top: 20px;">Embuh</a>
+    <div class="notification is-danger" id="message" style="display: none;margin-bottom: 1.5rem;"></div>
+    <section class="section">
+      <div class="container">
+        <h1 class="title">
+          Selamat Datang di Garasi Kami
+        </h1>
+        <img src="Logo.png" alt="" class="logo">
+        <br>
+        <p class="subtitle">
+          Ada yang bisa kami <strong>bantu</strong>?
+        </p>
+        <p>
+          <button class="button is-link is-pulled-right" id="add-button">Tambah</button>
+        </p>
+        <br>
+        <br>
+        <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth" id="table-data">
+          <thead>
+            <tr>
+              <th><abbr title="Nomor">No.</abbr></th>
+              <th><abbr title="Mobil">Mobil</abbr></th>
+              <th><abbr title="Jenis">Jenis</abbr></th>
+              <th><abbr title="Tahun">Tahun</abbr></th>
+              <th><abbr title="Keterangan">Keterangan</abbr></th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </div>
+      </tbody>
+    </table>
+  </div>
 </section>
+<div class="modal" id="add-modal">
+  <div class="modal-background"></div>
+  <div class="modal-content">
+    <div class="box">
+      <form id="add-form">
+        <div class="field">
+          <label class="label">Mobil</label>
+          <div class="control">
+            <input name="mobil" class="input" type="text" placeholder="Mobil">
+          </div>
+        </div>
+        <div class="field">
+          <label class="label">Jenis</label>
+          <div class="control">
+            <input name="jenis" class="input" type="text" placeholder="Jenis">
+          </div>
+        </div>
+        <div class="field">
+          <label class="label">Tahun</label>
+          <div class="control">
+            <input name="tahun" class="input" type="text" placeholder="Tahun">
+          </div>
+        </div>
+        <div class="field is-grouped">
+          <div class="control">
+            <button type="submit" class="button is-link">Tambah</button>
+          </div>
+          <div class="control">
+            <button type="reset" class="button is-text close-button">Cancel</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <button class="modal-close close-button is-large" aria-label="close"></button>
+</div>
+
+<div class="modal" id="edit-modal">
+  <div class="modal-background"></div>
+  <div class="modal-content">
+    <div class="box">
+      <form id="edit-form">
+        <input type="hidden" name="id">
+        <div class="field">
+          <label class="label">Mobil</label>
+          <div class="control">
+            <input name="mobil" class="input" type="text" placeholder="Mobil">
+          </div>
+        </div>
+        <div class="field">
+          <label class="label">Jenis</label>
+          <div class="control">
+            <input name="jenis" class="input" type="text" placeholder="Jenis">
+          </div>
+        </div>
+        <div class="field">
+          <label class="label">Tahun</label>
+          <div class="control">
+            <input name="tahun" class="input" type="text" placeholder="Tahun">
+          </div>
+        </div>
+        <div class="field is-grouped">
+          <div class="control">
+            <button type="submit" class="button is-link">Save</button>
+          </div>
+          <div class="control">
+            <button type="reset" class="button is-text close-button">Cancel</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <button class="modal-close close-button is-large" aria-label="close"></button>
+</div>
+<script>
+
+  function loadData() {
+    $.ajax({
+      url: './get_mobil',
+      type: 'GET',
+      dataType: 'json',
+      data: {},
+      beforeSend: function(){
+        $('#table-data tbody').html(`<tr> <td colspan="4" class="has-text-centered">Loading..</td> </tr>`);
+      },
+    }).done((data) => {
+      generateData(data);
+    }).fail(() => {
+      alert('Something went wrong!')
+    });
+  }
+
+  function generateData(data) {
+    var _newData = '';
+    if (data.length > 0) {
+      data.forEach((v, i) => {
+        _newData += `<tr>
+        <td>${i+1}.</td>
+        <td>${v.mobil}</td>
+        <td>${v.jenis}</td>
+        <td>${v.tahun}</td>
+        <td>
+        <button class="button is-success is-small edit-button" data-id="${v.id}">Edit</button>
+        <button class="button is-danger is-small delete-button" data-id="${v.id}">Delete</button>
+        </td>
+        </tr>`;
+      });
+    } else {
+      _newData += `<tr> <td colspan="4" class="has-text-centered">No data found.</td> </tr>`;
+    }
+    $('#table-data tbody').html(_newData);
+  }
+
+  $(document).ready(function() {
+      // open modal
+      $('#add-button').click(function(e) {
+        $('#add-modal').addClass('is-active');
+      });
+
+      // close modal
+      $('.modal .close-button').click(function(e) {
+        $(this).closest('.modal').removeClass('is-active');
+      });
+
+      // load first data
+      loadData()
+      
+      // submit event
+      $('#add-form').submit(function(e) {
+        e.preventDefault();
+        $.ajax({
+          url: './add_mobil',
+          type: 'POST',
+          dataType: 'json',
+          data: $(this).serialize(),
+          beforeSend: function(){
+            $('#message').removeClass('is-danger is-success is-info').hide()
+          },
+        }).done((res) => {
+          if (res.success) {
+            // refresh data
+            generateData(res.data);
+            // reset form
+            $(this).get(0).reset();
+            // display message
+            $('#message').addClass('is-success').text('Success input data').fadeIn()
+          } else {
+            // display message
+            $('#message').addClass('is-danger').text('Failed input data').fadeIn()
+          }
+        }).fail(_ => {
+          alert('Something went wrong!')
+        }).always((res) => {
+          $(this).closest('.modal').find('.modal-close.close-button').click();
+        });
+        
+      });
+
+      // get detail
+      $('#table-data').on('click', '.edit-button', function(e) {
+        e.preventDefault();
+        // get data with ajax
+        $.ajax({
+          url: './get_detail_mobil/' + $(this).attr('data-id'),
+          type: 'GET',
+          dataType: 'json',
+          data: {},
+        }).done(function(res) {
+          if (res.success) {
+            // set value form inside modal
+            $('#edit-form input[name=id]').val(res.data.id)
+            $('#edit-form input[name=mobil]').val(res.data.mobil)
+            $('#edit-form input[name=jenis]').val(res.data.jenis)
+            $('#edit-form input[name=tahun]').val(res.data.tahun)
+            // open edit modal
+            $('#edit-modal').addClass('is-active');
+          } else {
+            alert(res.message)
+          }
+        }).fail(function() {
+          alert('Something went wrong!')
+        });
+      });
+
+      // submit event (edit)
+      $('#edit-form').submit(function(e) {
+        e.preventDefault();
+        $.ajax({
+          url: './update_mobil/' + $('#edit-form input[name=id]').val(),
+          type: 'PUT',
+          dataType: 'json',
+          data: {
+            mobil: $('#edit-form input[name=mobil]').val(),
+            jenis: $('#edit-form input[name=jenis]').val(),
+            tahun: $('#edit-form input[name=tahun]').val(),
+          },
+          beforeSend: function(){
+            $('#message').removeClass('is-danger is-success is-info').hide()
+          },
+        }).done((res) => {
+          if (res.success) {
+            // refresh data
+            generateData(res.data);
+            // reset form
+            $(this).get(0).reset();
+            // display message
+            $('#message').addClass('is-success').text('Success update data').fadeIn()
+          } else {
+            // display message
+            $('#message').addClass('is-danger').text('Failed update data').fadeIn()
+          }
+        }).fail(_ => {
+          alert('Something went wrong!')
+        }).always((res) => {
+          $(this).closest('.modal').find('.modal-close.close-button').click();
+        });
+        
+      });
+
+      // delete data
+      $('#table-data').on('click', '.delete-button', function(e) {
+        e.preventDefault();
+        // confirm
+        if (confirm('Kamu Yakin?')) {
+          // get data with ajax
+          $.ajax({
+            url: './delete_mobil/' + $(this).attr('data-id'),
+            type: 'DELETE',
+            dataType: 'json',
+            data: {},
+            beforeSend: function(){
+              $('#message').removeClass('is-danger is-success is-info').hide()
+            },
+          }).done(function(res) {
+            if (res.success) {
+              $('#message').addClass('is-success').text('Data deleted successfully').fadeIn()
+              // reload data
+              loadData();
+            } else {
+              $('#message').addClass('is-danger').text('Failed to remove data').fadeIn()
+            }
+          }).fail(function() {
+            alert('Something went wrong!')
+          });
+        }
+      });
+    });
+  </script>
 </body>
 </html>
