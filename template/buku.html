@@ -13,12 +13,14 @@
 	<div class="container">
 
 		<div class="content">
+			<br>
 			<button class="button is-primary" id="add-button">Tambah Data Buku</button>
 			<a class="button is-danger" href="/mobil/">Mobil</a>
 			<a class="button is-info" href="/user/">User</a>
 			<a class="button is-dark" href="/kucing/">Kucing</a>
 			<a class="button is-warning" href="#">Embuh</a>
 			<hr>
+			<h1 class="is-size-3">BUKU PERPUSTAKAAN EDAN</h1>
 			<div class="notification is-danger" id="message" style="display: none;margin-bottom: 1.5rem;"></div>
 			<table class="table is-bordered is-striped is-fullwidth" id="table-data">
 				<thead>
@@ -128,7 +130,7 @@
 			}).done((data) => {
 				generateData(data);
 			}).fail(() => {
-				alert('Something went wrong!')
+				alert('Error!')
 			});
 		}
 
@@ -137,10 +139,10 @@
 			if (data.length > 0) {
 				data.forEach((v, i) => {
 					_newData += `<tr>
-						<td>${i+1}.</td>
-						<td>${v.judul}</td>
-						<td>${v.pengarang}</td>
-						<td>${v.tahun}</td>
+						<td class="has-text-danger">${i+1}.</td>
+						<td class="has-text-link">${v.judul}</td>
+						<td class="has-text-success">${v.pengarang}</td>
+						<td class="has-text-warning">${v.tahun}</td>
 						<td>
 							<button class="button is-info is-small edit-button" data-id="${v.id}">Ubah</button>
 							<button class="button is-danger is-small delete-button" data-id="${v.id}">Hapus</button>
@@ -176,7 +178,7 @@
 					dataType: 'json',
 					data: $(this).serialize(),
 					beforeSend: function(){
-						$('#message').removeClass('is-danger is-success is-info').hide()
+						$('#message').removeClass('is-danger is-link is-info').hide()
 					},
 				}).done((res) => {
 					if (res.success) {
@@ -185,13 +187,13 @@
 						// reset form
 						$(this).get(0).reset();
 						// display message
-						$('#message').addClass('is-success').text('Success input data').fadeIn()
+						$('#message').addClass('is-link').text('Data Buku Berhasil Ditambahkan').fadeIn()
 					} else {
 						// display message
-						$('#message').addClass('is-danger').text('Failed input data').fadeIn()
+						$('#message').addClass('is-danger').text('Gagal Menambahkan Data Buku').fadeIn()
 					}
 				}).fail(_ => {
-					alert('Something went wrong!')
+					alert('Error!')
 				}).always((res) => {
 					$(this).closest('.modal').find('.modal-close.close-button').click();
 				});
@@ -220,7 +222,7 @@
 						alert(res.message)
 					}
 				}).fail(function() {
-					alert('Something went wrong!')
+					alert('Error!')
 				});
 			});
 
@@ -237,7 +239,7 @@
 						tahun: $('#edit-form input[name=tahun]').val(),
 					},
 					beforeSend: function(){
-						$('#message').removeClass('is-danger is-success is-info').hide()
+						$('#message').removeClass('is-danger is-link is-info').hide()
 					},
 				}).done((res) => {
 					if (res.success) {
@@ -246,13 +248,13 @@
 						// reset form
 						$(this).get(0).reset();
 						// display message
-						$('#message').addClass('is-success').text('Success update data').fadeIn()
+						$('#message').addClass('is-link').text('Data Berhasil Diperbarui').fadeIn()
 					} else {
 						// display message
-						$('#message').addClass('is-danger').text('Failed update data').fadeIn()
+						$('#message').addClass('is-danger').text('Gagal Perbarui Data').fadeIn()
 					}
 				}).fail(_ => {
-					alert('Something went wrong!')
+					alert('Error!')
 				}).always((res) => {
 					$(this).closest('.modal').find('.modal-close.close-button').click();
 				});
@@ -263,7 +265,7 @@
 			$('#table-data').on('click', '.delete-button', function(e) {
 				e.preventDefault();
 				// confirm
-				if (confirm('Are you sure?')) {
+				if (confirm('Yakin Ingin Menghapus?')) {
 					// get data with ajax
 					$.ajax({
 						url: './delete_buku/' + $(this).attr('data-id'),
@@ -271,18 +273,18 @@
 						dataType: 'json',
 						data: {},
 						beforeSend: function(){
-							$('#message').removeClass('is-danger is-success is-info').hide()
+							$('#message').removeClass('is-danger is-link is-info').hide()
 						},
 					}).done(function(res) {
 						if (res.success) {
-							$('#message').addClass('is-success').text('Data deleted successfully').fadeIn()
+							$('#message').addClass('is-link').text('Data Berhasil Dihapus').fadeIn()
 							// reload data
 							loadData();
 						} else {
-							$('#message').addClass('is-danger').text('Failed to remove data').fadeIn()
+							$('#message').addClass('is-danger').text('Gagal Menghapus Data').fadeIn()
 						}
 					}).fail(function() {
-						alert('Something went wrong!')
+						alert('Error!')
 					});
 				}
 			});
