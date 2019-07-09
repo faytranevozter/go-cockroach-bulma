@@ -46,3 +46,19 @@ INSERT INTO tugas_cockroach.mobil(mobil, jenis, tahun) VALUES
 ('Holden', 'American muscle', '2019'),
 ('Innova', 'City car', '2019'),
 ('Civic', 'City Car', '2017');
+
+-- Tabel data kucing
+CREATE TABLE tugas_cockroach.kucing (
+	id SERIAL PRIMARY KEY, 
+	ras VARCHAR(50),
+	negara VARCHAR(50),
+	warna VARCHAR(4)
+);
+
+-- Data tabel kucing
+INSERT INTO tugas_cockroach.kucing(ras, negara, warna) VALUES
+('Agean', 'Yunani', 'Bicolor'),
+('Lynx', 'Amerika Serikat', 'Putih'),
+('Anatolian', 'Turki', 'Natural'),
+('Anggora', 'Turki', 'Natural'),
+('Balines', 'Amerika', 'Colorpoint');
