@@ -52,7 +52,7 @@ CREATE TABLE tugas_cockroach.kucing (
 	id SERIAL PRIMARY KEY, 
 	ras VARCHAR(50),
 	negara VARCHAR(50),
-	warna VARCHAR(4)
+	warna VARCHAR(40)
 );
 
 -- Data tabel kucing
