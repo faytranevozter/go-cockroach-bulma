@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{.Title}}</title>
+    <link rel="stylesheet" href="/static/css/bulma.min.css">
+    <script src="/static/js/jquery-3.4.1.min.js"></script>
+    <script src="/static/js/app.js"></script>
+</head>
+
+<body>
+
+    <div class="container">
+        <nav class="navbar" role="navigation" aria-label="main navigation" style="margin-bottom: 1rem;">
+            <div class="navbar-brand">
+                <a class="navbar-item" href="https://bulma.io">
+                    <img src="https://bulma.io/images/bulma-logo.png" width="112" height="28">
+                </a>
+
+                <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                </a>
+            </div>
+
+            <div id="navbarBasicExample" class="navbar-menu">
+                <div class="navbar-start">
+                    <a href="/" class="navbar-item"> Home </a>
+                    <a href="/user/" class="navbar-item"> User </a>
+                    <a href="/buku/" class="navbar-item"> Buku </a>
+                    <a href="/mobil/" class="navbar-item"> Mobil </a>
+                    <a href="/kucing/" class="navbar-item"> Kucing </a>
+                    <a href="/pegawai/" class="navbar-item"> Pegawai </a>
+                </div>
+
+                <div class="navbar-end">
+                    <div class="navbar-item">
+                        <div class="buttons">
+                            <a href="#" class="button is-primary">
+                                <strong>Tambah Data</strong>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <div class="content">
+            <button class="button is-link" id="add-button">Add</button>
+            <hr>
+            <div class="notification is-danger" id="message" style="display: none;margin-bottom: 1.5rem;"></div>
+            <table class="table is-bordered is-striped is-hoverable is-fullwidth" id="table-data">
+                <thead>
+                    <tr>
+                        <th>Nomor</th>
+                        <th>Kode Pegawai</th>
+                        <th>Nama</th>
+                        <th>Jabatan</th>
+                        <th>Divisi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td colspan="5" class="has-text-centered">Loading...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="modal" id="add-modal">
+        <div class="modal-background"></div>
+        <div class="modal-content">
+            <div class="box">
+                <form id="add-form">
+                    <div class="field">
+                        <label class="label">Kode Pegawai</label>
+                        <div class="control">
+                            <input name="kdpeg" class="input" type="text" placeholder="Kdpeg">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="label">Nama</label>
+                        <div class="control">
+                            <input name="nama" class="input" type="text" placeholder="Nama">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="label">Jabatan</label>
+                        <div class="control">
+                            <input name="jabatan" class="input" type="email" placeholder="Jabatan">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="label">Divisi</label>
+                        <div class="control">
+                            <input name="divisi" class="input" type="text" placeholder="Divisi">
+                        </div>
+                    </div>
+                    <div class="field is-grouped">
+                        <div class="control">
+                            <button type="submit" class="button is-link">Simpan</button>
+                        </div>
+                        <div class="control">
+                            <button type="reset" class="button is-text close-button">Batal</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <button class="modal-close close-button is-large" aria-label="close"></button>
+    </div>
+
+    <div class="modal" id="edit-modal">
+        <div class="modal-background"></div>
+        <div class="modal-content">
+            <div class="box">
+                <form id="edit-form">
+                    <input type="hidden" name="id">
+                    <div class="field">
+                        <label class="label">Nama</label>
+                        <div class="control">
+                            <input name="nama" class="input" type="text" placeholder="Nama">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="label">Jabatan</label>
+                        <div class="control">
+                            <input name="jabatan" class="input" type="text" placeholder="Jabatan">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="label">Divisi</label>
+                        <div class="control">
+                            <input name="divisi" class="input" type="text" placeholder="Divisi">
+                        </div>
+                    </div>
+
+                    <div class="field is-grouped">
+                        <div class="control">
+                            <button type="submit" class="button is-link">Simpan</button>
+                        </div>
+                        <div class="control">
+                            <button type="reset" class="button is-text close-button">Batal</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <button class="modal-close close-button is-large" aria-label="close"></button>
+    </div>
+
+    <script>
+        function loadData() {
+            $.ajax({
+                url: './get_pegawai',
+                type: 'GET',
+                dataType: 'json',
+                data: {},
+                beforeSend: function() {
+                    $('#table-data tbody').html(`<tr> <td colspan="4" class="has-text-centered">Loading..</td> </tr>`);
+                },
+            }).done((data) => {
+                generateData(data);
+            }).fail(() => {
+                alert('Something went wrong!')
+            });
+        }
+
+        function generateData(data) {
+            var _newData = '';
+            if (data.length > 0) {
+                data.forEach((v, i) => {
+                    _newData += `<tr>
+						<td>${i+1}.</td>
+						<td>${v.kdpeg}</td>
+						<td>${v.nama}</td>
+						<td>${v.jabatan}</td>
+						<td>${v.divisi}</td>
+						<td>
+							<button class="button is-success is-small edit-button" data-id="${v.id}">Ubah</button>
+							<button class="button is-danger is-small delete-button" data-id="${v.id}">Hapus</button>
+						</td>
+					</tr>`;
+                });
+            } else {
+                _newData += `<tr> <td colspan="4" class="has-text-centered">No data found.</td> </tr>`;
+            }
+            $('#table-data tbody').html(_newData);
+        }
+
+        $(document).ready(function() {
+            // open modal
+            $('#add-button').click(function(e) {
+                $('#add-modal').addClass('is-active');
+            });
+
+            // close modal
+            $('.modal .close-button').click(function(e) {
+                $(this).closest('.modal').removeClass('is-active');
+            });
+
+            // load first data
+            loadData()
+
+            // submit event
+            $('#add-form').submit(function(e) {
+                e.preventDefault();
+                $.ajax({
+                    url: './add_pegawai,
+                    type: 'POST',
+                    dataType: 'json',
+                    data: $(this).serialize(),
+                    beforeSend: function() {
+                        $('#message').removeClass('is-danger is-success is-info').hide()
+                    },
+                }).done((res) => {
+                    if (res.success) {
+                        // refresh data
+                        generateData(res.data);
+                        // reset form
+                        $(this).get(0).reset();
+                        // display message
+                        $('#message').addClass('is-success').text('Data berhasil ditambahkan').fadeIn()
+                    } else {
+                        // display message
+                        $('#message').addClass('is-danger').text('Gagal menambah data').fadeIn()
+                    }
+                }).fail(_ => {
+                    alert('Something went wrong!')
+                }).always((res) => {
+                    $(this).closest('.modal').find('.modal-close.close-button').click();
+                });
+
+            });
+
+            // get detail
+            $('#table-data').on('click', '.edit-button', function(e) {
+                e.preventDefault();
+                // get data with ajax
+                $.ajax({
+                    url: './get_detail_pegawai/' + $(this).attr('data-id'),
+                    type: 'GET',
+                    dataType: 'json',
+                    data: {},
+                }).done(function(res) {
+                    if (res.success) {
+                        // set value form inside modal
+                        $('#edit-form input[name=id]').val(res.data.id)
+                        $('#edit-form input[name=nama]').val(res.data.nama)
+                        $('#edit-form input[name=jabatan]').val(res.data.jabatan)
+                        $('#edit-form input[name=divisi]').val(res.data.divisi)
+                            // open edit modal
+                        $('#edit-modal').addClass('is-active');
+                    } else {
+                        alert(res.message)
+                    }
+                }).fail(function() {
+                    alert('Something went wrong!')
+                });
+            });
+
+            // submit event (edit)
+            $('#edit-form').submit(function(e) {
+                e.preventDefault();
+                $.ajax({
+                    url: './update_pegawai/' + $('#edit-form input[name=id]').val(),
+                    type: 'PUT',
+                    dataType: 'json',
+                    data: {
+                        nama: $('#edit-form input[name=nama]').val(),
+                        jabatan: $('#edit-form input[name=jabatan]').val(),
+                        divisi: $('#edit-form input[name=divisi]').val(),
+
+                    },
+                    beforeSend: function() {
+                        $('#message').removeClass('is-danger is-success is-info').hide()
+                    },
+                }).done((res) => {
+                    if (res.success) {
+                        // refresh data
+                        generateData(res.data);
+                        // reset form
+                        $(this).get(0).reset();
+                        // display message
+                        $('#message').addClass('is-success').text('Berhasil mengubah data').fadeIn()
+                    } else {
+                        // display message
+                        $('#message').addClass('is-danger').text('Gagal mengubah data').fadeIn()
+                    }
+                }).fail(_ => {
+                    alert('Something went wrong!')
+                }).always((res) => {
+                    $(this).closest('.modal').find('.modal-close.close-button').click();
+                });
+
+            });
+
+            // delete data
+            $('#table-data').on('click', '.delete-button', function(e) {
+                e.preventDefault();
+                // confirm
+                if (confirm('Apakah ingin menghapus data?')) {
+                    // get data with ajax
+                    $.ajax({
+                        url: './delete_pegawai/' + $(this).attr('data-id'),
+                        type: 'DELETE',
+                        dataType: 'json',
+                        data: {},
+                        beforeSend: function() {
+                            $('#message').removeClass('is-danger is-success is-info').hide()
+                        },
+                    }).done(function(res) {
+                        if (res.success) {
+                            $('#message').addClass('is-success').text('Berhasil menghapus data').fadeIn()
+                                // reload data
+                            loadData();
+                        } else {
+                            $('#message').addClass('is-danger').text('Gagal menghapus data').fadeIn()
+                        }
+                    }).fail(function() {
+                        alert('Something went wrong!')
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

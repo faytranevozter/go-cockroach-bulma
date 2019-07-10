@@ -66,3 +66,21 @@ INSERT INTO tugas_cockroach.kucing(ras, negara, warna) VALUES
 ('Anatolian', 'Turki', 'Natural'),
 ('Anggora', 'Turki', 'Natural'),
 ('Balines', 'Amerika', 'Colorpoint');
+
+DROP TABLE IF EXISTS tugas_cockroach.pegawai;
+-- create table pegawai
+CREATE TABLE tugas_cockroach.pegawai(
+	id SERIAL PRIMARY KEY, 
+	kdpeg INT,
+	nama VARCHAR(50),
+	jabatan VARCHAR(50),
+	divisi VARCHAR(50)
+);
+
+-- dummy data table pegawai
+INSERT INTO tugas_cockroach.pegawai(kdpeg, nama, jabatan, divisi) VALUES
+('7818', 'Rismiyati', 'Hardware', 'INSTI'),
+('1212', 'Laily Rahma', 'Pj. Adlog', 'Hukmas'),
+('3452', 'Fay Tranevoster', 'Pranata Komputer', 'Bagian Umum'),
+('2514', 'Oky Rian', 'Dokter', 'INSKA'),
+('2687', 'Indra Boy', 'Rekam Medis', 'ICM');           
