@@ -5,7 +5,7 @@
 #### Cloning web app from github repository
 `git clone https://github.com/faytranevozter/go-cockroach-bulma.git .` 
 #### Build the image
-`docker build -t faytranevozter/gocockroachbulma:v1.0-alpine .`  
+`docker build -t faytranevozter/gocockroachbulma:version .`  
 
 ### Cockroach-ing
 #### Pull Cockroach DB (optional)
@@ -28,4 +28,15 @@ or using `curl` instead
 `docker exec -i roach ./cockroach sql --insecure --database=tugas_cockroach < db.sql`  
 
 ### Running web app
-`docker run -d --name=webapp -p 9000:8888 --env ROACH_HOST=$ROACH_IP_ADDRESS faytranevozter/gocockroachbulma:v1.0-alpine`
+`docker run -d --name=webapp -p 9000:8888 --env ROACH_HOST=$ROACH_IP_ADDRESS faytranevozter/gocockroachbulma`
+
+
+### ONE HIT RUN
+```bash
+docker run -d --name=roach -p 26257:26257 -p 8080:8080 cockroachdb/cockroach start --insecure
+ROACH_IP_ADDRESS=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' roach)
+docker exec roach ./cockroach sql --insecure --execute="CREATE DATABASE IF NOT EXISTS tugas_cockroach;"
+curl https://raw.githubusercontent.com/faytranevozter/go-cockroach-bulma/master/db.sql -O
+docker exec -i roach ./cockroach sql --insecure --database=tugas_cockroach < db.sql
+docker run -d --name=webapp -p 9000:8888 --env ROACH_HOST=$ROACH_IP_ADDRESS faytranevozter/gocockroachbulma
+```
