@@ -13,7 +13,9 @@
 <body>
 
     <div class="container">
-        <nav class="navbar" role="navigation" aria-label="main navigation" style="margin-bottom: 1rem;">
+
+        <nav class="navbar has-background-light" role="navigation" aria-label="main navigation" style="margin-bottom: 1rem;">
+
             <div class="navbar-brand">
                 <a class="navbar-item" href="https://bulma.io">
                     <img src="https://bulma.io/images/bulma-logo.png" width="112" height="28">
@@ -46,17 +48,22 @@
                     </div>
                 </div>
             </div>
+            <hr>
+
         </nav>
-        <hr>
+
         <h1 class="title">Menampilkan Data Pegawai</h1>
-        <br>
-        <br>
+        <hr>
 
         <div class="content">
-            <button class="button is-link is-success has-text-centered" id="add-button">Tambah Data</button>
-            <hr>
+            <div class="navbar-end">
+                <div class="navbar-item">
+                    <button class="button is-link is-warning has-text-centered" id="add-button">Tambah Data</button>
+                </div>
+            </div>
+
             <div class="notification is-danger" id="message" style="display: none;margin-bottom: 1.5rem;"></div>
-            <table class="table is-bordered is-striped is-hoverable is-fullwidth has-text-centered" id="table-data">
+            <table class="table is-bordered is-striped is-hoverable is-fullwidth" id="table-data">
                 <thead>
                     <tr>
                         <th>Nomor</th>
