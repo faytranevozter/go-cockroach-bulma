@@ -39,8 +39,8 @@
                 <div class="navbar-end">
                     <div class="navbar-item">
                         <div class="buttons">
-                            <a href="#" class="button is-primary">
-                                <strong>Tambah Data</strong>
+                            <a href="https://github.com/riskme/go-cockroach-bulma" class="button is-primary">
+                                <strong>Lihat Rismi</strong>
                             </a>
                         </div>
                     </div>
@@ -64,7 +64,7 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td colspan="5" class="has-text-centered">Loading...</td>
+                        <td colspan="6" class="has-text-centered">Loading...</td>
                     </tr>
                 </tbody>
             </table>
@@ -120,6 +120,7 @@
             <div class="box">
                 <form id="edit-form">
                     <input type="hidden" name="id">
+                    <input type="hidden" name="kdpeg">
                     <div class="field">
                         <label class="label">Nama</label>
                         <div class="control">
@@ -161,7 +162,7 @@
                 dataType: 'json',
                 data: {},
                 beforeSend: function() {
-                    $('#table-data tbody').html(`<tr> <td colspan="4" class="has-text-centered">Loading..</td> </tr>`);
+                    $('#table-data tbody').html(`<tr> <td colspan="6" class="has-text-centered">Loading..</td> </tr>`);
                 },
             }).done((data) => {
                 generateData(data);
@@ -187,7 +188,7 @@
 					</tr>`;
                 });
             } else {
-                _newData += `<tr> <td colspan="4" class="has-text-centered">No data found.</td> </tr>`;
+                _newData += `<tr> <td colspan="6" class="has-text-centered">No data found.</td> </tr>`;
             }
             $('#table-data tbody').html(_newData);
         }
@@ -250,6 +251,7 @@
                     if (res.success) {
                         // set value form inside modal
                         $('#edit-form input[name=id]').val(res.data.id)
+                        $('#edit-form input[name=kdpeg]').val(res.data.kdpeg)
                         $('#edit-form input[name=nama]').val(res.data.nama)
                         $('#edit-form input[name=jabatan]').val(res.data.jabatan)
                         $('#edit-form input[name=divisi]').val(res.data.divisi)
@@ -271,6 +273,7 @@
                     type: 'PUT',
                     dataType: 'json',
                     data: {
+                        kdpeg: $('#edit-form input[name=kdpeg]').val(),
                         nama: $('#edit-form input[name=nama]').val(),
                         jabatan: $('#edit-form input[name=jabatan]').val(),
                         divisi: $('#edit-form input[name=divisi]').val(),

@@ -57,13 +57,13 @@ func initRouter() *mux.Router {
 	kucingruter.HandleFunc("/delete_kucing/{id:[0-9]+}", delete_kucing).Methods("DELETE")
 
 	// route pegawai
-	mobilruter := r.PathPrefix("/pegawai").Subrouter()
-	mobilruter.HandleFunc("/", all_mobil).Methods("GET")
-	mobilruter.HandleFunc("/get_pegawai", get_pegawai).Methods("GET")
-	mobilruter.HandleFunc("/get_detail_pegawai/{id:[0-9]+}", get_pegawai_detail).Methods("GET")
-	mobilruter.HandleFunc("/add_pegawai", add_pegawai).Methods("POST")
-	mobilruter.HandleFunc("/update_pegawai/{id:[0-9]+}", update_mobil).Methods("PUT")
-	mobilruter.HandleFunc("/delete_pegawai/{id:[0-9]+}", delete_mobil).Methods("DELETE")
+	pegawairuter := r.PathPrefix("/pegawai").Subrouter()
+	pegawairuter.HandleFunc("/", all_pegawai).Methods("GET")
+	pegawairuter.HandleFunc("/get_pegawai", get_pegawai).Methods("GET")
+	pegawairuter.HandleFunc("/get_detail_pegawai/{id:[0-9]+}", get_pegawai_detail).Methods("GET")
+	pegawairuter.HandleFunc("/add_pegawai", add_pegawai).Methods("POST")
+	pegawairuter.HandleFunc("/update_pegawai/{id:[0-9]+}", update_pegawai).Methods("PUT")
+	pegawairuter.HandleFunc("/delete_pegawai/{id:[0-9]+}", delete_pegawai).Methods("DELETE")
 
 	return r
 }
