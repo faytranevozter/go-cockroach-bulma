@@ -4,7 +4,7 @@ This app following by [this](https://gowebexamples.com/) website.
 
 ## Requirement
 - golang
-- cockroachdb (not yet implemented)
+- cockroachdb
 
 ## Installation
 ### Golang [Official Instruction](https://golang.org/doc/install)
@@ -48,11 +48,16 @@ for Linux
 `cockroach start --insecure`  
 for Docker  
 `docker run -d -p 26257:26257 -p 8080:8080 cockroachdb/cockroach:v19.1.0 start --insecure`
+3. Create Database. (if you've done this before, then ignore this step)  
+for Linux  
+`cockroach sql --insecure --execute="CREATE DATABASE IF NOT EXISTS tugas_cockroach;"`  
+for Docker  
+`docker exec roach ./cockroach sql --insecure --execute="CREATE DATABASE IF NOT EXISTS tugas_cockroach;"`
 3. Import sql from cockroach sql. (if you've done this before, then ignore this step)  
 for Linux  
-`cockroach sql --insecure`  
+`cockroach sql --insecure --database=tugas_cockroach < db.sql`  
 for Docker  
-`docker exec -it container_name ./cockroach sql --insecure`  
+`docker exec -it container_name ./cockroach sql --insecure --database=tugas_cockroach < db.sql`  
 and then import sql from [this](https://raw.githubusercontent.com/faytranevozter/go-cockroach-bulma/master/db.sql)
 4. Run `go run *.go`
 5. Done. See (http://localhost:8888) to see the app.

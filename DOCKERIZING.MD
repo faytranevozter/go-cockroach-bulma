@@ -25,7 +25,7 @@ Download using `wget`
 or using `curl` instead  
 `curl https://raw.githubusercontent.com/faytranevozter/go-cockroach-bulma/master/db.sql -O`
 #### Import SQL
-`docker exec -i roach ./cockroach sql --database=tugas_cockroach < db.sql --insecure`  
+`docker exec -i roach ./cockroach sql --insecure --database=tugas_cockroach < db.sql`  
 
 ### Running web app
 `docker run -d --name=webapp -p 9000:8888 --env ROACH_HOST=$ROACH_IP_ADDRESS faytranevozter/gocockroachbulma:v1.0-alpine`

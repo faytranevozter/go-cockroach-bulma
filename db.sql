@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS tugas_cockroach.user;
 -- create table user
 CREATE TABLE tugas_cockroach.user (
 	id SERIAL PRIMARY KEY, 
@@ -15,6 +16,7 @@ INSERT INTO tugas_cockroach.user(name, email) VALUES
 ('Rismi', 'rismi@gmail.com');
 
 
+DROP TABLE IF EXISTS tugas_cockroach.buku;
 -- create table buku
 CREATE TABLE tugas_cockroach.buku (
 	id SERIAL PRIMARY KEY, 
@@ -31,6 +33,7 @@ INSERT INTO tugas_cockroach.buku(judul, pengarang, tahun) VALUES
 ('Antologi Puisi', 'Laily Rahma', '2018'),
 ('Agro Cabe', 'Rismi', '2017');
 
+DROP TABLE IF EXISTS tugas_cockroach.mobil;
 -- create table mobil
 CREATE TABLE tugas_cockroach.mobil (
 	id SERIAL PRIMARY KEY, 
@@ -47,6 +50,7 @@ INSERT INTO tugas_cockroach.mobil(mobil, jenis, tahun) VALUES
 ('Innova', 'City car', '2019'),
 ('Civic', 'City Car', '2017');
 
+DROP TABLE IF EXISTS tugas_cockroach.kucing;
 -- Tabel data kucing
 CREATE TABLE tugas_cockroach.kucing (
 	id SERIAL PRIMARY KEY, 
