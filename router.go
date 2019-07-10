@@ -56,7 +56,14 @@ func initRouter() *mux.Router {
 	kucingruter.HandleFunc("/update_kucing/{id:[0-9]+}", update_kucing).Methods("PUT")
 	kucingruter.HandleFunc("/delete_kucing/{id:[0-9]+}", delete_kucing).Methods("DELETE")
 
-
+	// route pegawai
+	pegawairouter := r.PathPrefix("/pegawai").Subrouter()
+	pegawairouter.HandleFunc("/", all_pegawai).Methods("GET")
+	pegawairouter.HandleFunc("/get_pegawai", get_pegawai).Methods("GET")
+	pegawairouter.HandleFunc("/get_detail_pegawai/{id:[0-9]+}", get_pegawai_detail).Methods("GET")
+	pegawairouter.HandleFunc("/add_pegawai", add_pegawai).Methods("POST")
+	pegawairouter.HandleFunc("/update_pegawai/{id:[0-9]+}", update_pegawai).Methods("PUT")
+	pegawairouter.HandleFunc("/delete_pegawai/{id:[0-9]+}", delete_pegawai).Methods("DELETE")
 
 	return r
 }
