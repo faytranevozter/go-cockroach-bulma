@@ -47,12 +47,16 @@
                 </div>
             </div>
         </nav>
+        <hr>
+        <h1 class="title">Menampilkan Data Pegawai</h1>
+        <br>
+        <br>
 
         <div class="content">
-            <button class="button is-link" id="add-button">Add</button>
+            <button class="button is-link is-success has-text-centered" id="add-button">Tambah Data</button>
             <hr>
             <div class="notification is-danger" id="message" style="display: none;margin-bottom: 1.5rem;"></div>
-            <table class="table is-bordered is-striped is-hoverable is-fullwidth" id="table-data">
+            <table class="table is-bordered is-striped is-hoverable is-fullwidth has-text-centered" id="table-data">
                 <thead>
                     <tr>
                         <th>Nomor</th>
@@ -60,6 +64,7 @@
                         <th>Nama</th>
                         <th>Jabatan</th>
                         <th>Divisi</th>
+                        <th>Opsi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -91,7 +96,7 @@
                     <div class="field">
                         <label class="label">Jabatan</label>
                         <div class="control">
-                            <input name="jabatan" class="input" type="email" placeholder="Jabatan">
+                            <input name="jabatan" class="input" type="text" placeholder="Jabatan">
                         </div>
                     </div>
                     <div class="field">
@@ -182,7 +187,7 @@
 						<td>${v.jabatan}</td>
 						<td>${v.divisi}</td>
 						<td>
-							<button class="button is-success is-small edit-button" data-id="${v.id}">Ubah</button>
+							<button class="button is-link is-small edit-button" data-id="${v.id}">Ubah</button>
 							<button class="button is-danger is-small delete-button" data-id="${v.id}">Hapus</button>
 						</td>
 					</tr>`;
@@ -211,7 +216,7 @@
             $('#add-form').submit(function(e) {
                 e.preventDefault();
                 $.ajax({
-                    url: './add_pegawai,
+                    url: './add_pegawai',
                     type: 'POST',
                     dataType: 'json',
                     data: $(this).serialize(),

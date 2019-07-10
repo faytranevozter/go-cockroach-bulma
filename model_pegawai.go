@@ -47,7 +47,7 @@ func all_pegawai(w http.ResponseWriter, r *http.Request) {
 
 func get_pegawai(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-type", "application/json")
-	datajson, _ := json.Marshal(getUser())
+	datajson, _ := json.Marshal(getPegawai())
 	fmt.Fprintf(w, string(datajson))
 }
 
