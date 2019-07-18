@@ -64,3 +64,10 @@ and then import sql from [this](https://raw.githubusercontent.com/faytranevozter
 
 ## Deploy App
 [See here](https://github.com/faytranevozter/go-cockroach-bulma/blob/master/DOCKERIZING.MD)  
+
+# Contributor
+[@faytranevozter](https://github.com/faytranevozter/) M. Fahrur Rifai 165410011  
+[@indrahad](https://github.com/indrahad/) Indra Purnama H. 165410005  
+[@riskme](https://github.com/riskme/) Rismiyati 165410108  
+[@lailyr](https://github.com/lailyr/) Laily Rohmawati 165410174  
+[@okayeah](https://github.com/okayeah/) Oky Riyanto 165410231  
